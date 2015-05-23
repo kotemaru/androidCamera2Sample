@@ -1,3 +1,4 @@
+// Copyright 2015 kotemaru.org. (http://www.apache.org/licenses/LICENSE-2.0)
 package org.kotemaru.android.camera2sample;
 
 import java.util.Arrays;
