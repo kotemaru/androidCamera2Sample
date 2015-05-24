@@ -43,7 +43,7 @@ public class Camera2StateMachine {
 		if (mState != null) throw new IllegalStateException("Alrady started state=" + mState);
 		mTextureView = textureView;
 		mCameraManager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
-		nextState(mInitState);
+		nextState(mInitSurfaceState);
 	}
 	public boolean takePicture(ImageReader.OnImageAvailableListener listener) {
 		if (mState != mPreviewState) return false;
@@ -103,19 +103,13 @@ public class Camera2StateMachine {
 
 	// ===================================================================================
 	// State Definition
-	private final State mInitState = new State("Init") {
+	private final State mInitSurfaceState = new State("InitSurface") {
 		public void enter() throws CameraAccessException {
 			if (mTextureView.isAvailable()) {
 				nextState(mOpenCameraState);
 			} else {
-				nextState(mPrepareSurfaceState);
+				mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
 			}
-		}
-	};
-	// -----------------------------------------------------------------------------------
-	private final State mPrepareSurfaceState = new State("PrepareSurface") {
-		public void enter() throws CameraAccessException {
-			mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
 		}
 		public void onSurfaceTextureAvailable(int width, int height) {
 			nextState(mOpenCameraState);
